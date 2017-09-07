@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 日志输出配置默认放置在src/main/resources下面 -->
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+    <contextName>logback</contextName>
+    <property name="log.path" value="E:\\logback\\spring-boot-logback.log"/>
+
+    <!--输出到控制台-->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+             <level>ERROR</level>
+         </filter>-->
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %contextName [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!--输出到文件-->
+    <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.path}</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logback.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!-- 表示只保留最近30天的日志，以防止日志填满整个磁盘空间 -->
+            <maxHistory>30</maxHistory>
+            <!-- 指定日志文件的上限大小，例如设置为1GB的话，那么到了这个值，就会删除旧的日志。 -->
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %contextName [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 将root的打印级别设置为“info”，指定了名字为“console”的appender。 -->
+    <root level="info">
+        <appender-ref ref="console"/>
+        <!--<appender-ref ref="file"/>-->
+    </root>
+
+    <!-- 指定某个类或包下面的日志打印配置。logback为java中的包 -->
+    <!--<logger name="com.dilu.controller"/>-->
+    <!--logback.LogbackDemo：类的全路径 -->
+    <!--<logger name="com.dilu.controller.member.MemberController" level="trace" additivity="false">-->
+        <!--<appender-ref ref="console"/>-->
+    <!--</logger>-->
+</configuration>
