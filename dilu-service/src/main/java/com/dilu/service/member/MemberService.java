@@ -12,4 +12,8 @@ public interface MemberService {
 
     public int deleteById(Long id);
 
+    public int insert(MemberDO memberDO);
+
+    public int update(MemberDO memberDO);
+
 }

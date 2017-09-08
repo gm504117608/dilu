@@ -9,11 +9,11 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>dilu-service</module>
         <module>dilu-api</module>
-        <module>dilu-common</module>
+        <module>dilu-service</module>
         <module>dilu-dao</module>
         <module>dilu-domain</module>
+        <module>dilu-common</module>
     </modules>
 
     <parent>
@@ -24,11 +24,27 @@
     </parent>
 
     <properties>
+        <!-- 打包跳过test start -->
+        <!-- maven方式跳过maven test, 等同$ mvn package -Dmaven.test.skip=true -->
+        <maven.test.skip>true</maven.test.skip>
+        <!-- surefire plugin方式跳过maven test， 等同$ mvn package -DskipTests -->
+        <!--<skipTests>true</skipTests>-->
+        <!-- 打包跳过test end -->
+
+        <!-- 指定spring boot的启动类-->
+        <start-class>com.dilu.Application</start-class>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
         <!--工具包版本-->
         <commons-lang3.version>3.4</commons-lang3.version>
+        <!--数据库连接-->
+        <mybatis-spring-boot-starter.version>1.3.1</mybatis-spring-boot-starter.version>
+        <mysql-connector.version>5.1.39</mysql-connector.version>
+        <druid.version>1.0.19</druid.version>
+        <alibaba-fastjson.version>1.2.38</alibaba-fastjson.version>
+        <!-- restfulAPI维护工具Swagger2的依赖 -->
+        <springfox-swagger2.version>2.2.2</springfox-swagger2.version>
     </properties>
 
     <dependencies>
@@ -51,25 +67,26 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql-connector.version}</version>
         </dependency>
         <!--数据可连接池-->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>
-            <version>1.0.19</version>
+            <version>${druid.version}</version>
         </dependency>
         <!--mybatis的依赖-->
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
-            <version>1.3.1</version>
+            <version>${mybatis-spring-boot-starter.version}</version>
         </dependency>
 
         <!--alibaba json 处理包-->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.38</version>
+            <version>${alibaba-fastjson.version}</version>
         </dependency>
 
         <!--apache工具类包 start -->
@@ -80,13 +97,30 @@
         </dependency>
         <!--apache工具类包 end -->
 
+        <!-- restfulAPI维护工具Swagger2的依赖start-->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${springfox-swagger2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>${springfox-swagger2.version}</version>
+        </dependency>
+        <!-- restfulAPI维护工具Swagger2的依赖end-->
+
     </dependencies>
 
     <build>
         <plugins>
             <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
             </plugin>
         </plugins>
     </build>
