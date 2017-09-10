@@ -13,5 +13,10 @@
     <artifactId>dilu-common</artifactId>
 
 
-
+    <dependencies>
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+        </dependency>
+    </dependencies>
 </project>

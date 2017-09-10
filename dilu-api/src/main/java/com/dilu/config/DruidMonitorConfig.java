@@ -24,8 +24,8 @@ public class DruidMonitorConfig {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     // druid监控拦截配置
-    private String controlUsername;
-    private String controlPassword;
+    private String loginUsername;
+    private String loginPassword;
     private String allow;
     private String deny;
     private String exclusions;
@@ -42,8 +42,8 @@ public class DruidMonitorConfig {
         ServletRegistrationBean reg = new ServletRegistrationBean();
         reg.setServlet(new StatViewServlet());
         reg.addUrlMappings("/druid/*");
-        reg.addInitParameter("loginUsername", controlUsername);
-        reg.addInitParameter("loginPassword", controlPassword);
+        reg.addInitParameter("loginUsername", loginUsername);
+        reg.addInitParameter("loginPassword", loginPassword);
         reg.addInitParameter("allow", allow);// IP白名单(没有配置或者为空，则允许所有访问)
         reg.addInitParameter("deny", deny);// IP黑名单 (存在共同时，deny优先于allow)
         reg.addInitParameter("resetEnable", resetEnable); // 是否能够重置数据
@@ -64,20 +64,20 @@ public class DruidMonitorConfig {
         return filterRegistrationBean;
     }
 
-    public String getControlUsername() {
-        return controlUsername;
+    public String getLoginUsername() {
+        return loginUsername;
     }
 
-    public void setControlUsername(String controlUsername) {
-        this.controlUsername = controlUsername;
+    public void setLoginUsername(String loginUsername) {
+        this.loginUsername = loginUsername;
     }
 
-    public String getControlPassword() {
-        return controlPassword;
+    public String getLoginPassword() {
+        return loginPassword;
     }
 
-    public void setControlPassword(String controlPassword) {
-        this.controlPassword = controlPassword;
+    public void setLoginPassword(String loginPassword) {
+        this.loginPassword = loginPassword;
     }
 
     public String getAllow() {

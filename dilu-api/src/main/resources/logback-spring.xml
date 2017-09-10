@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- 日志输出配置默认放置在src/main/resources下面 -->
+<!-- 日志输出级别 TRACE < DEBUG < INFO < WARN < ERROR -->
 <configuration scan="true" scanPeriod="60 seconds" debug="false">
     <contextName>logback</contextName>
     <property name="log.path" value="E:\\logback\\spring-boot-logback.log"/>

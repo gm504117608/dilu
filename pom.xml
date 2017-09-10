@@ -45,6 +45,8 @@
         <alibaba-fastjson.version>1.2.38</alibaba-fastjson.version>
         <!-- restfulAPI维护工具Swagger2的依赖 -->
         <springfox-swagger2.version>2.2.2</springfox-swagger2.version>
+        <!-- redis 缓存 -->
+        <redis.clients.version>2.9.0</redis.clients.version>
     </properties>
 
     <dependencies>
@@ -110,10 +112,18 @@
         </dependency>
         <!-- restfulAPI维护工具Swagger2的依赖end-->
 
+        <!--devtools 实现修改代码自动部署。不需要频繁启动关闭项目运行-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional><!-- optional为true说明依赖不会传递，之后项目引用了该pom需要重新引入devtools-->
+        </dependency>
+
     </dependencies>
 
     <build>
         <plugins>
+            <!--指定项目使用jdk1.8就行编译插件-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
