@@ -18,6 +18,8 @@ public interface MemberService {
 
     public int update(MemberDO memberDO);
 
-    public Map<String, Object> login(MemberDO memberDO);
+    public Map<String, Object> login(MemberDO memberDO, String token);
+
+    public String getWxOpenidSessionKey(MemberDO memberDO, String code, String encryptedData, String iv);
 
 }

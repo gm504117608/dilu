@@ -52,7 +52,7 @@ public class RedisConfig {
     public int timeout;
 
     @Bean
-    public JedisPool jedisPool(){
+    public JedisPool jedisPool() {
         JedisPoolConfig config = new JedisPoolConfig();
         config.setMaxIdle(poolMaxIdle);
         config.setMinIdle(poolMinIdle);

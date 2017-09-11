@@ -35,7 +35,7 @@ public class BaseController {
      *
      * @return
      */
-    public Response error(int code, String message,Object data) {
+    public Response error(int code, String message, Object data) {
         Response resp = new Response(code, message, data);
         return resp;
     }

@@ -2,6 +2,12 @@ package com.dilu.service.member.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.dilu.common.base.impl.AbstractService;
+import com.dilu.common.cache.RedisClient;
+import com.dilu.common.exception.ServiceException;
+import com.dilu.common.util.AESUtil;
+import com.dilu.common.util.HttpClientApiService;
+import com.dilu.common.util.MD5Util;
+import com.dilu.config.SystemResourcesConfig;
 import com.dilu.dao.member.MemberMapper;
 import com.dilu.domain.member.MemberDO;
 import com.dilu.service.member.MemberService;
@@ -11,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -26,28 +33,55 @@ public class MemberServiceImpl extends AbstractService<MemberDO, Long> implement
     private MemberMapper memberMapper;
 
     @Autowired
-    public void setBaseMapper(){
+    private RedisClient redisClient;
+
+    @Autowired
+    private HttpClientApiService httpClientApiService;
+
+    @Autowired
+    public void setBaseMapper() {
         super.setBaseMapper(memberMapper);
     }
 
-    public Map<String, Object> login(MemberDO memberDO){
-        return null;
+    public Map<String, Object> login(MemberDO memberDO, String token) {
+        MemberDO member = getMemberInfo(memberDO);
+        Long id = null;
+        try {
+            if (null == member) { // 新增
+                insert(memberDO);
+                id = memberDO.getId();
+            } else { // 修改
+                update(memberDO);
+                id = member.getId();
+            }
+        } catch (Exception e) {
+            throw new ServiceException("微信登录我方应用出现错误：" + e.getMessage());
+        }
+        Map<String, Object> result = new HashMap<String, Object>();
+        result.put("id", id);
+        // 缓存token处理
+        result.put("token", createToken(token, memberDO.getOpenid(), id));
+        return result;
     }
 
 
     @Override
     public String getWxOpenidSessionKey(MemberDO memberDO, String code, String encryptedData, String iv) {
 
-        String url = Environment.WX_CODE_URL +
-                "?appid=" + Environment.WX_APPID +
-                "&secret=" + Environment.WX_SECRET +
-                "&js_code=" + code +
-                "&grant_type=authorization_code";
-        String result = HttpUtil.getResponseByPost(url);
+        String url = SystemResourcesConfig.WX_URL +
+                "?appid=" + SystemResourcesConfig.WX_APPID +
+                "&secret=" + SystemResourcesConfig.WX_SECRET +
+                "&js_code=" + code + "&grant_type=authorization_code";
+        String result = null;
+        try {
+            result = httpClientApiService.doPost(url);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         logger.debug("通过登录凭证获取微信信息 ： " + result);
 
         if (StringUtils.isEmpty(result)) {
-            return "通过登录凭证获取微信信息出现异常";
+            return "通过登录凭证获取不到微信信息";
         }
         JSONObject wxInfo = JSONObject.parseObject(result);
         Integer errCode = (Integer) wxInfo.get("errcode");
@@ -61,6 +95,60 @@ public class MemberServiceImpl extends AbstractService<MemberDO, Long> implement
             decryptEncryptedData(memberDO, encryptedData, session_key, iv);
         }
         return (String) wxInfo.get("errmsg");
+    }
+
+
+    /**
+     * 对encryptedData加密数据进行AES解密
+     *
+     * @param memberDO
+     * @param encryptedData
+     * @param session_key
+     * @param iv
+     */
+    private void decryptEncryptedData(MemberDO memberDO, String encryptedData, String session_key, String iv) {
+        // 解密出来的数据包含了用户的所有信息
+        String result = AESUtil.decrypt(encryptedData, session_key, iv);
+        if (StringUtils.isNotEmpty(result)) {
+            JSONObject userInfo = JSONObject.parseObject(result);
+            memberDO.setUnionid(userInfo.getString("unionId"));
+        }
+    }
+
+    /**
+     * 用户判断用户登录是否失效
+     *
+     * @param token  会话token值
+     * @param openId 微信openid
+     * @param id     用户id
+     */
+    private String createToken(String token, String openId, Long id) {
+
+        if (StringUtils.isNotEmpty(token)) {
+            String str = redisClient.get(token, String.class);
+            if (StringUtils.isNotEmpty(str)) {
+                return token;
+            }
+        }
+        token = MD5Util.md5(openId);
+        // 24 * 60 * 60
+        try {
+            redisClient.set(token, 86400, String.valueOf(id));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return token;
+    }
+
+    /**
+     * 获取会员信息
+     *
+     * @param memberDO
+     * @return
+     */
+    private MemberDO getMemberInfo(MemberDO memberDO) {
+        // 父类里面的方法
+        return find(memberDO);
     }
 
 }

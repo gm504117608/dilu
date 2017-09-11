@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 /**
  * 界面返回数据封装类
+ *
  * @author guonima
  * @create 2017-09-08 16:05
  */

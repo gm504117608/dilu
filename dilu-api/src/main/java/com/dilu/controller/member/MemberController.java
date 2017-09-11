@@ -2,7 +2,9 @@ package com.dilu.controller.member;
 
 import com.dilu.common.Response;
 import com.dilu.common.base.BaseController;
+import com.dilu.common.util.CommonUtil;
 import com.dilu.domain.member.MemberDO;
+import com.dilu.domain.member.MemberDTO;
 import com.dilu.service.member.MemberService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -61,9 +63,35 @@ public class MemberController extends BaseController {
     @ApiOperation(value = "修改用户信息", notes = "修改用户的基本信息")
     @ApiImplicitParam(name = "memberDO", value = "用户实体信息", dataType = "MemberDO")
     @RequestMapping(value = "", method = {RequestMethod.PUT})
-    public Response update(@RequestBody MemberDO memberDO) {
-        logger.info("待修改用户信息：" + memberDO.toString());
+    public Response update(@RequestBody MemberDTO memberDTO) {
+        logger.info("待修改用户信息：" + memberDTO.toString());
 
+        StringBuilder sb = new StringBuilder();
+        String signature = memberDTO.getSignature();
+        if (StringUtils.isNotEmpty(signature)) {
+            if (!CommonUtil.checkLength(signature, 1, 180)) {
+                sb.append("【个性签名】长度在1到180之间;");
+            }
+        }
+        String mobile = memberDTO.getMobile();
+        if (StringUtils.isEmpty(mobile)) {
+            sb.append("【联系电话】不能为空;");
+        } else {
+            if (!CommonUtil.isPhoneNum(mobile)) {
+                sb.append("【联系电话】格式不正确;");
+            }
+        }
+        String email = memberDTO.getEmail();
+        if (StringUtils.isNotEmpty(email)) {
+            if (!CommonUtil.checkEmail(email)) {
+                sb.append("【邮箱】格式不正确;");
+            }
+        }
+        if (sb.length() != 0) {
+            return error(1000, sb.toString());
+        }
+        MemberDO memberDO = new MemberDO();
+        MemberUtil.MemberDTO2MemberDO(memberDTO, memberDO);
         return success(memberService.update(memberDO));
     }
 }

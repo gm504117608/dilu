@@ -12,11 +12,30 @@
 
     <artifactId>dilu-common</artifactId>
 
+    <properties>
+        <!-- apache httpclient 请求工具 -->
+        <httpclient.version>4.3.1</httpclient.version>
+        <!-- 开源的加解密解决方案 -->
+        <bouncycastle.version>1.57</bouncycastle.version>
+    </properties>
 
     <dependencies>
         <dependency>
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>${httpclient.version}</version>
+        </dependency>
+
+        <!-- 开源的加解密解决方案 -->
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk15on</artifactId>
+            <version>${bouncycastle.version}</version>
         </dependency>
     </dependencies>
 </project>

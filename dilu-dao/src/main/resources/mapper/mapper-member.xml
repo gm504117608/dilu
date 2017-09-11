@@ -84,7 +84,7 @@
     </update>
 
     <!-- 获取会员数据 -->
-    <select id="findMemberInfo" parameterType="memberDO" resultMap="memberResultMap">
+    <select id="find" parameterType="memberDO" resultMap="memberResultMap">
         select
         <include refid="memberColumns"/>
         from member

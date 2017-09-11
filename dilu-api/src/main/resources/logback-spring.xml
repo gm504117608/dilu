@@ -31,7 +31,7 @@
     </appender>
 
     <!-- 将root的打印级别设置为“info”，指定了名字为“console”的appender。 -->
-    <root level="info">
+    <root level="debug">
         <appender-ref ref="console"/>
         <!--<appender-ref ref="file"/>-->
     </root>
