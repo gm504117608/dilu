@@ -15,8 +15,7 @@ import java.util.Date;
 //@ApiModel(description = "用户信息实体")
 public class MemberDO extends BaseDO {
 
-//    @ApiModelProperty(name="用户唯一标识", example = "123", position = 1, dataType = "Long")
-    private Long id; // 用户id
+//    @ApiModelProperty(name="用户唯一标识", example = "123", position = 1, dataType = "String")
     private String openid; // openid是公众号的普通用户的唯一的标识
     private String unionid; // 微信下同一企业下面小程序、公众号关联id
     private String nickName; // 用户名称
@@ -31,14 +30,6 @@ public class MemberDO extends BaseDO {
     private Integer enabled; // 是否激活【1（可用）；0（不可用）】
     private Date createTime; // 创建时间
     private Date modifyTime; // 修改时间
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getOpenid() {
         return openid;
@@ -155,7 +146,6 @@ public class MemberDO extends BaseDO {
     @Override
     public String toString() {
         return "MemberDO{" +
-                "id=" + id +
                 ", openid='" + openid + '\'' +
                 ", unionid='" + unionid + '\'' +
                 ", nickName='" + nickName + '\'' +

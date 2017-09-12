@@ -52,16 +52,18 @@ public class MemberController extends BaseController {
     }
 
     @ApiOperation(value = "新增用户信息", notes = "保存用户的基本信息")
-    @ApiImplicitParam(name = "memberDO", value = "用户实体信息", dataType = "MemberDO")
+    @ApiImplicitParam(name = "memberDTO", value = "用户实体信息", dataType = "MemberDTO")
     @RequestMapping(value = "", method = {RequestMethod.POST})
-    public Response save(@RequestBody MemberDO memberDO) {
-        logger.info("待保存用户信息：" + memberDO.toString());
+    public Response save(@RequestBody MemberDTO memberDTO) {
+        logger.info("待保存用户信息：" + memberDTO.toString());
 
+        MemberDO memberDO = new MemberDO();
+        MemberUtil.MemberDTO2MemberDO(memberDTO, memberDO);
         return success(memberService.insert(memberDO));
     }
 
     @ApiOperation(value = "修改用户信息", notes = "修改用户的基本信息")
-    @ApiImplicitParam(name = "memberDO", value = "用户实体信息", dataType = "MemberDO")
+    @ApiImplicitParam(name = "memberDTO", value = "用户实体信息", dataType = "MemberDTO")
     @RequestMapping(value = "", method = {RequestMethod.PUT})
     public Response update(@RequestBody MemberDTO memberDTO) {
         logger.info("待修改用户信息：" + memberDTO.toString());

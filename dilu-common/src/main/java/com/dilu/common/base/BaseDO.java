@@ -19,5 +19,12 @@ public abstract class BaseDO implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
+
+    @Override
+    public String toString() {
+        return "BaseDO{" +
+                "id=" + id +
+                '}';
+    }
 }
 

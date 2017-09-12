@@ -16,6 +16,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import sun.misc.resources.Messages_es;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -43,6 +45,7 @@ public class MemberServiceImpl extends AbstractService<MemberDO, Long> implement
         super.setBaseMapper(memberMapper);
     }
 
+    @Transactional
     public Map<String, Object> login(MemberDO memberDO, String token) {
         MemberDO member = getMemberInfo(memberDO);
         Long id = null;
@@ -78,7 +81,7 @@ public class MemberServiceImpl extends AbstractService<MemberDO, Long> implement
         } catch (Exception e) {
             e.printStackTrace();
         }
-        logger.debug("通过登录凭证获取微信信息 ： " + result);
+        logger.info("通过登录凭证获取微信信息 ： " + result);
 
         if (StringUtils.isEmpty(result)) {
             return "通过登录凭证获取不到微信信息";
@@ -112,6 +115,12 @@ public class MemberServiceImpl extends AbstractService<MemberDO, Long> implement
         if (StringUtils.isNotEmpty(result)) {
             JSONObject userInfo = JSONObject.parseObject(result);
             memberDO.setUnionid(userInfo.getString("unionId"));
+            memberDO.setNickName(userInfo.getString("nickName"));
+            memberDO.setAvatarUrl(userInfo.getString("avatarUrl"));
+            memberDO.setCity(userInfo.getString("city"));
+            memberDO.setCountry(userInfo.getString("country"));
+            memberDO.setGender(userInfo.getInteger("gender"));
+            memberDO.setProvince(userInfo.getString("province"));
         }
     }
 
