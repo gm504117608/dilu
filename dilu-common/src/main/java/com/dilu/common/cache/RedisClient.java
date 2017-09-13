@@ -27,7 +27,7 @@ public class RedisClient {
      * @return 存储成功 true 否则 false
      * @throws Exception
      */
-    public boolean set(String key, String value) throws Exception {
+    public boolean set(String key, String value) {
         Jedis jedis = null;
         try {
             jedis = jedisPool.getResource();
@@ -50,7 +50,7 @@ public class RedisClient {
      * @return 存储成功 true 否则 false
      * @throws Exception
      */
-    public boolean set(String key, int seconds, String value) throws Exception {
+    public boolean set(String key, int seconds, String value) {
         Jedis jedis = null;
         try {
             jedis = jedisPool.getResource();
@@ -72,7 +72,7 @@ public class RedisClient {
      * @return 存储成功 true 否则 false
      * @throws Exception
      */
-    public boolean set(String key, Object value) throws Exception {
+    public boolean set(String key, Object value) {
         Jedis jedis = null;
         try {
             String objectJson = JSON.toJSONString(value);
@@ -96,7 +96,7 @@ public class RedisClient {
      * @return 存储成功 true 否则 false
      * @throws Exception
      */
-    public boolean set(String key, int seconds, Object value) throws Exception {
+    public boolean set(String key, int seconds, Object value) {
         Jedis jedis = null;
         try {
             String objectJson = JSON.toJSONString(value);
@@ -426,5 +426,23 @@ public class RedisClient {
         }
     }
 
+    /**
+     * 设置某个key的过期时间
+     * @param key 唯一值
+     * @param seconds 有效时间
+     * @return
+     */
+    public Long expire(String key, int seconds) {
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            return jedis.expire(key, seconds);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            jedisPool.returnResource(jedis);
+        }
+    }
 
 }

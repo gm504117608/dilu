@@ -68,7 +68,6 @@ public class MemberServiceImpl extends AbstractService<MemberDO, Long> implement
     }
 
 
-    @Override
     public String getWxOpenidSessionKey(MemberDO memberDO, String code, String encryptedData, String iv) {
 
         String url = SystemResourcesConfig.WX_URL +
@@ -100,6 +99,36 @@ public class MemberServiceImpl extends AbstractService<MemberDO, Long> implement
         return (String) wxInfo.get("errmsg");
     }
 
+    @Override
+    public String getWxOpenidSessionKey(String code, String token) {
+
+        String url = SystemResourcesConfig.WX_URL +
+                "?appid=" + SystemResourcesConfig.WX_APPID +
+                "&secret=" + SystemResourcesConfig.WX_SECRET +
+                "&js_code=" + code + "&grant_type=authorization_code";
+        String result = null;
+        try {
+            result = httpClientApiService.doPost(url);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        logger.info("通过登录凭证获取微信信息 ： " + result);
+
+        if (StringUtils.isEmpty(result)) {
+            return "通过登录凭证获取不到微信信息";
+        }
+        JSONObject wxInfo = JSONObject.parseObject(result);
+        Integer errCode = (Integer) wxInfo.get("errcode");
+        if (null == errCode) {
+            // 通过sessionKey 和 iv 来解密 encryptedData 数据获取 UnionID (小程序绑定公众号之后的关联值) 。
+            String session_key = (String) wxInfo.get("session_key"); //
+            String openid = (String) wxInfo.get("openid");
+            Integer expires_in = (Integer) wxInfo.get("expires_in");
+            createToken(token, openid, session_key, expires_in);
+        }
+        return (String) wxInfo.get("errmsg");
+    }
+
 
     /**
      * 对encryptedData加密数据进行AES解密
@@ -125,29 +154,29 @@ public class MemberServiceImpl extends AbstractService<MemberDO, Long> implement
     }
 
     /**
-     * 用户判断用户登录是否失效
+     * 生成token存入redis
      *
      * @param token  会话token值
-     * @param openId 微信openid
-     * @param id     用户id
+     * @param openId 用户唯一标识
+     * @param session_key  用户数据进行加密签名的密钥
      */
-    private String createToken(String token, String openId, Long id) {
-
-        if (StringUtils.isNotEmpty(token)) {
-            String str = redisClient.get(token, String.class);
-            if (StringUtils.isNotEmpty(str)) {
-                return token;
-            }
-        }
+    private String createRedisToken(String token, String openId, String session_key, int expires_in) {
         token = MD5Util.md5(openId);
-        // 24 * 60 * 60
-        try {
-            redisClient.set(token, 86400, String.valueOf(id));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        redisClient.hset(token, "openId", openId);
+        redisClient.hset(token, "session_key", session_key);
+        redisClient.expire(token, expires_in);
         return token;
     }
+
+    /**
+     * 从redis获取token信息
+     *
+     * @param token  会话token值
+     */
+    private String getRedisToken(String token) {
+        return redisClient.hget(token, "openId");
+    }
+
 
     /**
      * 获取会员信息

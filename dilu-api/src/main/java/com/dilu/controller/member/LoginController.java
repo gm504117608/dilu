@@ -68,4 +68,18 @@ public class LoginController extends BaseController {
         //TODO 待开发。。。
         return null;
     }
+
+    @ApiOperation(value = "微信登录code处理", notes = "用户微信进入小程序之后对获取到的code进行处理")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "code", value = "登录凭证code", required = true, paramType = "path", dataType = "String"),
+            @ApiImplicitParam(name = "token", value = "会话唯一标识", required = false, dataType = "String", paramType = "header"),
+    })
+    @RequestMapping(value = "/code/{code}", method = {RequestMethod.GET})
+    public Response parseCode(@PathVariable String code, @RequestHeader String token) {
+        logger.info("code=" + code);
+
+        String result = memberService.getWxOpenidSessionKey(code, token);
+
+        return null;
+    }
 }
