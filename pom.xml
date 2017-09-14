@@ -47,6 +47,8 @@
         <springfox-swagger2.version>2.2.2</springfox-swagger2.version>
         <!-- redis 缓存 -->
         <redis.clients.version>2.9.0</redis.clients.version>
+        <!--pageHelper分页插件-->
+        <pageHelper.version>4.1.0</pageHelper.version>
     </properties>
 
     <dependencies>
@@ -117,6 +119,13 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <optional>true</optional><!-- optional为true说明依赖不会传递，之后项目引用了该pom需要重新引入devtools-->
+        </dependency>
+
+        <!--pageHelper分页插件-->
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper</artifactId>
+            <version>${pageHelper.version}</version>
         </dependency>
 
     </dependencies>

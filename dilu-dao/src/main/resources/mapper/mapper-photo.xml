@@ -32,7 +32,7 @@
                 and id = trim(#{id})
             </if>
             <if test="searchValue != null and searchValue != ''">
-                and name like CONCAT(trim(#{searhValue}), '%')
+                and name like CONCAT('%', trim(#{searchValue}), '%')
             </if>
         </where>
     </select>

@@ -2,7 +2,9 @@ package com.dilu.controller.photo;
 
 import com.dilu.common.Response;
 import com.dilu.common.base.BaseController;
+import com.dilu.domain.photo.PhotoDO;
 import com.dilu.service.photo.PhotoService;
+import com.github.pagehelper.PageHelper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -14,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -48,7 +51,9 @@ public class PhotoController extends BaseController {
         }
         Map<String, Object> param = new HashMap<>();
         param.put("searchValue", searchValue);
-        return success(photoService.queryListAll(param));
+        PageHelper.startPage(Integer.valueOf(pageNum), Integer.valueOf(pageSize));
+        List<PhotoDO> list = photoService.queryListAll(param);
+        return success(list);
     }
 
     @ApiOperation(value = "获取指定相册信息", notes = "通过相册唯一标识获取相册信息")
