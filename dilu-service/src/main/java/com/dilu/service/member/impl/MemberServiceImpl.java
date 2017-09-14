@@ -17,10 +17,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sun.misc.resources.Messages_es;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author guonima
@@ -46,62 +42,38 @@ public class MemberServiceImpl extends AbstractService<MemberDO, Long> implement
     }
 
     @Transactional
-    public Map<String, Object> login(MemberDO memberDO, String token) {
-        MemberDO member = getMemberInfo(memberDO);
-        Long id = null;
-        try {
-            if (null == member) { // 新增
-                insert(memberDO);
-                id = memberDO.getId();
-            } else { // 修改
-                update(memberDO);
-                id = member.getId();
-            }
-        } catch (Exception e) {
-            throw new ServiceException("微信登录我方应用出现错误：" + e.getMessage());
-        }
-        Map<String, Object> result = new HashMap<String, Object>();
-        result.put("id", id);
-        // 缓存token处理
-        result.put("token", createToken(token, memberDO.getOpenid(), id));
-        return result;
-    }
-
-
-    public String getWxOpenidSessionKey(MemberDO memberDO, String code, String encryptedData, String iv) {
-
-        String url = SystemResourcesConfig.WX_URL +
-                "?appid=" + SystemResourcesConfig.WX_APPID +
-                "&secret=" + SystemResourcesConfig.WX_SECRET +
-                "&js_code=" + code + "&grant_type=authorization_code";
-        String result = null;
-        try {
-            result = httpClientApiService.doPost(url);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        logger.info("通过登录凭证获取微信信息 ： " + result);
-
-        if (StringUtils.isEmpty(result)) {
-            return "通过登录凭证获取不到微信信息";
-        }
-        JSONObject wxInfo = JSONObject.parseObject(result);
-        Integer errCode = (Integer) wxInfo.get("errcode");
-        if (null == errCode) {
-            // 通过sessionKey 和 iv 来解密 encryptedData 数据获取 UnionID (小程序绑定公众号之后的关联值) 。
-            String session_key = (String) wxInfo.get("session_key"); //
-            String openid = (String) wxInfo.get("openid");
-            Integer expires_in = (Integer) wxInfo.get("expires_in");
+    public Long login(String encryptedData, String iv, String signature, String token) {
+        String openid = getRedisToken(token, "openid");
+        if (StringUtils.isNotEmpty(openid)) {
+            String session_key = getRedisToken(token, "session_key");
+            MemberDO memberDO = new MemberDO();
             memberDO.setOpenid(openid);
             // 对encryptedData加密数据进行AES解密
             decryptEncryptedData(memberDO, encryptedData, session_key, iv);
+            MemberDO member = getMemberInfo(memberDO);
+            Long id = null;
+            try {
+                if (null == member) { // 新增
+                    insert(memberDO);
+                    id = memberDO.getId();
+                } else { // 修改
+                    update(memberDO);
+                    id = member.getId();
+                }
+            } catch (Exception e) {
+                throw new ServiceException("微信登录我方应用出现错误：" + e.getMessage());
+            }
+            return id;
         }
-        return (String) wxInfo.get("errmsg");
+        return null;
     }
+
 
     @Override
     public String getWxOpenidSessionKey(String code, String token) {
-
+        if (StringUtils.isNotEmpty(getRedisToken(token, "openid"))) {
+            return token;
+        }
         String url = SystemResourcesConfig.WX_URL +
                 "?appid=" + SystemResourcesConfig.WX_APPID +
                 "&secret=" + SystemResourcesConfig.WX_SECRET +
@@ -115,7 +87,7 @@ public class MemberServiceImpl extends AbstractService<MemberDO, Long> implement
         logger.info("通过登录凭证获取微信信息 ： " + result);
 
         if (StringUtils.isEmpty(result)) {
-            return "通过登录凭证获取不到微信信息";
+            return null;
         }
         JSONObject wxInfo = JSONObject.parseObject(result);
         Integer errCode = (Integer) wxInfo.get("errcode");
@@ -124,9 +96,10 @@ public class MemberServiceImpl extends AbstractService<MemberDO, Long> implement
             String session_key = (String) wxInfo.get("session_key"); //
             String openid = (String) wxInfo.get("openid");
             Integer expires_in = (Integer) wxInfo.get("expires_in");
-            createToken(token, openid, session_key, expires_in);
+            return createRedisToken(openid, session_key, expires_in);
         }
-        return (String) wxInfo.get("errmsg");
+        logger.info("通过登录凭证获取微信信息 ： " + (String) wxInfo.get("errmsg"));
+        return null;
     }
 
 
@@ -156,13 +129,12 @@ public class MemberServiceImpl extends AbstractService<MemberDO, Long> implement
     /**
      * 生成token存入redis
      *
-     * @param token  会话token值
-     * @param openId 用户唯一标识
-     * @param session_key  用户数据进行加密签名的密钥
+     * @param openid      用户唯一标识
+     * @param session_key 用户数据进行加密签名的密钥
      */
-    private String createRedisToken(String token, String openId, String session_key, int expires_in) {
-        token = MD5Util.md5(openId);
-        redisClient.hset(token, "openId", openId);
+    private String createRedisToken(String openid, String session_key, int expires_in) {
+        String token = MD5Util.md5(openid);
+        redisClient.hset(token, "openid", openid);
         redisClient.hset(token, "session_key", session_key);
         redisClient.expire(token, expires_in);
         return token;
@@ -171,10 +143,10 @@ public class MemberServiceImpl extends AbstractService<MemberDO, Long> implement
     /**
      * 从redis获取token信息
      *
-     * @param token  会话token值
+     * @param token 会话token值
      */
-    private String getRedisToken(String token) {
-        return redisClient.hget(token, "openId");
+    private String getRedisToken(String token, String filed) {
+        return redisClient.hget(token, filed);
     }
 
 

@@ -215,6 +215,27 @@ public class RedisClient {
      * 向缓存中设置对象
      *
      * @param key
+     * @param value
+     * @return
+     */
+    public boolean hset(String key, String field, String value) {
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            jedis.hset(key, field, value);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            jedisPool.returnResource(jedis);
+        }
+    }
+
+    /**
+     * 向缓存中设置对象
+     *
+     * @param key
      * @param field
      * @return
      */

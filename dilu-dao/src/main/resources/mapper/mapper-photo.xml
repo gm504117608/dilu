@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dilu.dao.photo.PhotoMapper">
+
+    <sql id="photoColumns">
+        id, name, type, size, price, production_price, agency_price, picture_url,
+        production_url, remark, create_time
+    </sql>
+
+    <resultMap id="photoResultMap" type="photoDO">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="type" property="type"/>
+        <result column="size" property="size"/>
+        <result column="price" property="price"/>
+        <result column="production_price" property="productionPrice"/>
+        <result column="agency_price" property="agencyPrice"/>
+        <result column="picture_url" property="pictureUrl"/>
+        <result column="production_url" property="productionUrl"/>
+        <result column="remark" property="remark"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <!-- 获取相册数据 -->
+    <select id="queryListAll" parameterType="java.util.Map" resultMap="photoResultMap">
+        select
+        <include refid="photoColumns"/>
+        from photo
+        <where>
+            <if test="id != null">
+                and id = trim(#{id})
+            </if>
+            <if test="searchValue != null and searchValue != ''">
+                and name like CONCAT(trim(#{searhValue}), '%')
+            </if>
+        </where>
+    </select>
+
+    <!-- 获取相册数据 -->
+    <select id="findById" parameterType="java.lang.Long" resultMap="photoResultMap">
+        select <include refid="photoColumns"/> from photo where id = trim(#{id})
+    </select>
+
+
+</mapper>

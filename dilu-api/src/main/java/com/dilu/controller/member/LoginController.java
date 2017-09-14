@@ -40,20 +40,22 @@ public class LoginController extends BaseController {
         logger.info("用户加解密信息weiXinDTO：{}；会话token：{}", weiXinDTO.toString(), token);
 
         StringBuffer sb = new StringBuffer();
-        String code = weiXinDTO.getCode();
-        if (StringUtils.isEmpty(code)) {
-            sb.append("登录凭证code不能为空;");
+        String signature = weiXinDTO.getSignature();
+        if (StringUtils.isEmpty(signature)) {
+            sb.append("签名串不能为空;");
+        }
+        String iv = weiXinDTO.getIv();
+        if (StringUtils.isEmpty(iv)) {
+            sb.append("加密算法的初始向量不能为空;");
+        }
+        String encryptedData = weiXinDTO.getEncryptedData();
+        if (StringUtils.isEmpty(encryptedData)) {
+            sb.append("用户加密信息不能为空;");
         }
         if (sb.length() != 0) {
             return error(1000, sb.toString());
         }
-        MemberDO memberDO = new MemberDO();
-        String result = memberService.getWxOpenidSessionKey(memberDO, code,
-                weiXinDTO.getEncryptedData(), weiXinDTO.getIv());
-        if (StringUtils.isNotEmpty(result)) {
-            return error(2000, result);
-        }
-        return success(memberService.login(memberDO, token));
+        return success(memberService.login(encryptedData, iv, signature, token));
     }
 
     @ApiOperation(value = "退出登录", notes = "用户退出登录")
@@ -76,10 +78,15 @@ public class LoginController extends BaseController {
     })
     @RequestMapping(value = "/code/{code}", method = {RequestMethod.GET})
     public Response parseCode(@PathVariable String code, @RequestHeader String token) {
-        logger.info("code=" + code);
+        logger.info("code={}, token={}", code, token);
 
-        String result = memberService.getWxOpenidSessionKey(code, token);
-
-        return null;
+        StringBuffer sb = new StringBuffer();
+        if (StringUtils.isEmpty(code)) {
+            sb.append("登录凭证code不能为空;");
+        }
+        if (sb.length() != 0) {
+            return error(1000, sb.toString());
+        }
+        return success(memberService.getWxOpenidSessionKey(code, token));
     }
 }

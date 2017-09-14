@@ -18,7 +18,7 @@ public interface MemberService {
 
     public int update(MemberDO memberDO);
 
-    public Map<String, Object> login(MemberDO memberDO, String token);
+    public Long login(String encryptedData, String iv, String signature, String token);
 
     public String getWxOpenidSessionKey(String code, String token);
 
