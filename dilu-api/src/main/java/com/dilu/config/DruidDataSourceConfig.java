@@ -50,6 +50,7 @@ public class DruidDataSourceConfig {
 
     /**
      * 数据源配置
+     *
      * @return
      */
     @Bean(initMethod = "init", destroyMethod = "close")

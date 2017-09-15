@@ -83,7 +83,7 @@ public class HttpClientConfig {
             @Qualifier("httpClientConnectionManager") PoolingHttpClientConnectionManager httpClientConnectionManager,
             @Qualifier("httpRequestRetryHandler") HttpRequestRetryHandler httpRequestRetryHandler,
             @Qualifier("connectionKeepAliveStrategy") ConnectionKeepAliveStrategy connectionKeepAliveStrategy) {
-        
+
         // HttpClientBuilder中的构造方法被protected修饰，所以这里不能直接使用new来实例化一个HttpClientBuilder，
         // 可以使用HttpClientBuilder提供的静态方法create()来获取HttpClientBuilder对象
         HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
@@ -137,10 +137,11 @@ public class HttpClientConfig {
 
     /**
      * httpclient重连设置
+     *
      * @return
      */
     @Bean(name = "httpRequestRetryHandler")
-    public HttpRequestRetryHandler getHttpRequestRetryHandler(){
+    public HttpRequestRetryHandler getHttpRequestRetryHandler() {
         // 请求重试
         return new HttpRequestRetryHandler() {
             public boolean retryRequest(IOException exception, int executionCount, HttpContext context) {
@@ -180,6 +181,7 @@ public class HttpClientConfig {
 
     /**
      * 设置 保持连接策略 连接能有效的时间
+     *
      * @return
      */
     @Bean(name = "connectionKeepAliveStrategy")

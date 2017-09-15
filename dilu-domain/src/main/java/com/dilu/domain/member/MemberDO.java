@@ -15,7 +15,7 @@ import java.util.Date;
 //@ApiModel(description = "用户信息实体")
 public class MemberDO extends BaseDO {
 
-//    @ApiModelProperty(name="用户唯一标识", example = "123", position = 1, dataType = "String")
+    //    @ApiModelProperty(name="用户唯一标识", example = "123", position = 1, dataType = "String")
     private String openid; // openid是公众号的普通用户的唯一的标识
     private String unionid; // 微信下同一企业下面小程序、公众号关联id
     private String nickName; // 用户名称

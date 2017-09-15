@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dilu.dao.dictionary.DictionaryMapper">
+
+    <sql id="dictionaryColumns">
+        id, name, code, type, enabled, remark, create_time, modify_time
+    </sql>
+
+    <resultMap id="dictionaryResultMap" type="dictionaryDO">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="type" property="type"/>
+        <result column="code" property="code"/>
+        <result column="enabled" property="enabled"/>
+        <result column="remark" property="remark"/>
+        <result column="create_time" property="createTime"/>
+        <result column="modify_time" property="modifyTime"/>
+    </resultMap>
+
+    <!-- 获取字典数据 -->
+    <select id="queryListAll" parameterType="dictionaryResultMap" resultMap="dictionaryResultMap">
+        select
+        <include refid="dictionaryColumns"/>
+        from dictionary
+        <where>
+            <if test="name != null and name != ''">
+                and name = trim(#{name})
+            </if>
+            <if test="type != null and type != ''">
+                and type = trim(#{type})
+            </if>
+            <if test="code != null and code != ''">
+                and code = trim(#{code})
+            </if>
+        </where>
+    </select>
+
+    <!-- 获取字典数据 -->
+    <select id="findById" parameterType="java.lang.Long" resultMap="dictionaryResultMap">
+        select <include refid="dictionaryColumns"/> from dictionary where id = trim(#{id})
+    </select>
+
+</mapper>

@@ -27,9 +27,9 @@ public class AESUtil {
     /**
      * AES解密
      *
-     * @param data           密文，被加密的数据
-     * @param key            秘钥
-     * @param iv             偏移量
+     * @param data 密文，被加密的数据
+     * @param key  秘钥
+     * @param iv   偏移量
      * @return
      * @throws Exception
      */
@@ -41,9 +41,9 @@ public class AESUtil {
     /**
      * AES解密
      *
-     * @param data           密文，被加密的数据
-     * @param key            秘钥
-     * @param iv             偏移量
+     * @param data     密文，被加密的数据
+     * @param key      秘钥
+     * @param iv       偏移量
      * @param encoding 解密后的结果需要进行的编码
      * @return
      * @throws Exception

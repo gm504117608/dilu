@@ -13,6 +13,7 @@ import org.springframework.context.annotation.PropertySource;
 
 /**
  * druid监控配置类
+ *
  * @author guonima
  * @create 2017-09-08 15:29
  */
@@ -35,6 +36,7 @@ public class DruidMonitorConfig {
 
     /**
      * druid监控拦截配置、类似于web.xml中servlet拦截配置
+     *
      * @return
      */
     @Bean
@@ -52,6 +54,7 @@ public class DruidMonitorConfig {
 
     /**
      * druid监控拦截过滤配置、类似于web.xml中filter的配置
+     *
      * @return
      */
     @Bean

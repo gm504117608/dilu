@@ -3,13 +3,16 @@ package com.dilu.controller.photo;
 import com.dilu.common.Response;
 import com.dilu.common.base.BaseController;
 import com.dilu.domain.photo.PhotoDO;
+import com.dilu.service.dictionary.DictionaryService;
 import com.dilu.service.photo.PhotoService;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.annotations.Mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,11 +36,15 @@ public class PhotoController extends BaseController {
     @Autowired
     private PhotoService photoService;
 
+    @Autowired
+    private DictionaryService dictionaryService;
+
+
     @ApiOperation(value = "获取相册信息", notes = "通过分页信息、查询条件获取相册信息")
-    @ApiImplicitParams ({
-        @ApiImplicitParam(name = "pageNum", value = "第几页", required = true, dataType = "String", paramType = "query"),
-        @ApiImplicitParam(name = "pageSize", value = "每页数量", required = true, dataType = "String", paramType = "query"),
-        @ApiImplicitParam(name = "searchValue", value = "查询条件", required = false, dataType = "String", paramType = "query"),
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "pageNum", value = "第几页", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "pageSize", value = "每页数量", required = true, dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "searchValue", value = "查询条件", required = false, dataType = "String", paramType = "query"),
     })
     @RequestMapping(value = "", method = {RequestMethod.GET})
     public Response findPhotos(@RequestParam String pageNum, @RequestParam String pageSize, @RequestParam String searchValue) {
@@ -51,13 +58,16 @@ public class PhotoController extends BaseController {
         }
         Map<String, Object> param = new HashMap<>();
         param.put("searchValue", searchValue);
-        PageHelper.startPage(Integer.valueOf(pageNum), Integer.valueOf(pageSize));
-        List<PhotoDO> list = photoService.queryListAll(param);
-        return success(list);
+        PageHelper.startPage(Integer.valueOf(pageNum), Integer.valueOf(pageSize), " create_time desc ");
+        List<Map<String, Object>> list = photoService.queryListByPage(param);
+        for (Map<String, Object> map : list) {
+            map.put("typeName", dictionaryService.getDictionaryName((String) map.get("type"), (String) map.get("code")));
+        }
+        return handlerPagination(new PageInfo(list));
     }
 
     @ApiOperation(value = "获取指定相册信息", notes = "通过相册唯一标识获取相册信息")
-    @ApiImplicitParams ({
+    @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "相册信息唯一标识", required = true, dataType = "String", paramType = "path"),
     })
     @RequestMapping(value = "/{id}", method = {RequestMethod.GET})

@@ -23,7 +23,7 @@
     </resultMap>
 
     <!-- 获取相册数据 -->
-    <select id="queryListAll" parameterType="java.util.Map" resultMap="photoResultMap">
+    <select id="queryListByPage" parameterType="java.util.Map" resultType="java.util.Map">
         select
         <include refid="photoColumns"/>
         from photo
@@ -32,7 +32,8 @@
                 and id = trim(#{id})
             </if>
             <if test="searchValue != null and searchValue != ''">
-                and name like CONCAT('%', trim(#{searchValue}), '%')
+                and (name like CONCAT('%', trim(#{searchValue}), '%')
+                or (size like CONCAT('%', trim(#{searchValue}), '%')))
             </if>
         </where>
     </select>

@@ -134,7 +134,7 @@ public class AbstractService<T, ID extends Serializable> implements BaseService<
     }
 
     @Override
-    public List<T> queryListByPage(Map<String, Object> parameter) {
+    public List<Map<String, Object>> queryListByPage(Map<String, Object> parameter) {
         return baseMapper.queryListByPage(parameter);
     }
 

@@ -9,7 +9,8 @@ import com.dilu.domain.member.MemberDTO;
  */
 public class MemberUtil {
 
-    private MemberUtil(){}
+    private MemberUtil() {
+    }
 
     /**
      * 将界面传入实体数据赋值到数据库表对应实体数据

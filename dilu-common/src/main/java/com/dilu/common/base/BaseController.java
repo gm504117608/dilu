@@ -1,9 +1,11 @@
 package com.dilu.common.base;
 
 import com.dilu.common.Response;
+import com.dilu.common.domain.Pagination;
 import com.dilu.common.exception.DataException;
 import com.dilu.common.exception.ServiceException;
 import com.dilu.common.exception.SystemException;
+import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 /**
@@ -75,7 +77,7 @@ public class BaseController {
      * @return
      */
     @ExceptionHandler
-    public Response exceptionHandler(Exception e) {
+    public Response handlerException(Exception e) {
         Response resp = new Response(9999);
         if (e instanceof ServiceException) {
             resp.setMessage("肯定是你对不起我了");
@@ -87,5 +89,20 @@ public class BaseController {
             resp.setMessage("我想静静，不要问我静静是谁");
         }
         return resp;
+    }
+
+    /**
+     * 处理数据分页信息
+     *
+     * @param pageInfo 分页信息
+     */
+    public Response handlerPagination(PageInfo pageInfo) {
+        Pagination page = new Pagination();
+        page.setPageNum(pageInfo.getPageNum());
+        page.setPageSize(pageInfo.getPageSize());
+        page.setTotalNum(pageInfo.getPages());
+        page.setTotalSize(pageInfo.getTotal());
+        page.setList(pageInfo.getList());
+        return success(page);
     }
 }

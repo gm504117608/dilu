@@ -129,12 +129,12 @@ public interface BaseService<T, ID extends Serializable> {
 
     /**
      * @param parameter 查询参数map
-     * @return List<T>	返回查询的对象集合
+     * @return List<Map<String, Object>> 返回查询的对象集合
      * @throws
      * @Title: queryListAll
      * @Description: 根据分页参数查询对象
      */
-    public List<T> queryListByPage(Map<String, Object> parameter);
+    public List<Map<String, Object>> queryListByPage(Map<String, Object> parameter);
 
     /**
      * @param parameter 查询参数map

@@ -15,4 +15,6 @@ public interface PhotoService {
 
     public List<PhotoDO> queryListAll(Map<String, Object> parameter);
 
+    public List<Map<String, Object>> queryListByPage(Map<String, Object> parameter);
+
 }

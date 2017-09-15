@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 /**
  * 微信获取用户信息加解密信息
+ *
  * @author guonima
  * @create 2017-09-12 17:45
  */

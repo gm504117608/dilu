@@ -36,7 +36,7 @@ public interface BaseMapper<T, ID extends Serializable> {
 
     public List<T> queryListAll(T t);
 
-    public List<T> queryListByPage(Map<String, Object> parameter);
+    public List<Map<String, Object>> queryListByPage(Map<String, Object> parameter);
 
     public int count(Map<String, Object> parameter);
 

@@ -74,10 +74,10 @@ public class HttpClientApiService {
         } catch (Exception e) {
             throw e;
         } finally {
-            if(entity != null){
+            if (entity != null) {
                 EntityUtils.consumeQuietly(entity);
             }
-            if(response != null){
+            if (response != null) {
                 response.close();
             }
         }
@@ -198,10 +198,10 @@ public class HttpClientApiService {
         } catch (Exception e) {
             throw e;
         } finally {
-            if(entity != null){
+            if (entity != null) {
                 EntityUtils.consumeQuietly(entity);
             }
-            if(response != null){
+            if (response != null) {
                 response.close();
             }
         }
