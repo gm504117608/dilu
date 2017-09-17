@@ -8,6 +8,7 @@ import com.dilu.service.dictionary.DictionaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Dictionary;
 import java.util.List;
 
 /**
@@ -47,7 +48,7 @@ public class DictionaryServiceImpl extends AbstractService<DictionaryDO, Long> i
     }
 
     public List<DictionaryDO> getDictionaries(String type) {
-        List dictionary = redisClient.get("dictionary_" + type, List.class);
+        List<DictionaryDO> dictionary = redisClient.lGet("dictionary_" + type, DictionaryDO.class);
         if (null == dictionary) {
             DictionaryDO dictionaryDO = new DictionaryDO();
             dictionaryDO.setType(type);

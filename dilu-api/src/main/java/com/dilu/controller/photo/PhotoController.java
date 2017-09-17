@@ -2,7 +2,6 @@ package com.dilu.controller.photo;
 
 import com.dilu.common.Response;
 import com.dilu.common.base.BaseController;
-import com.dilu.domain.photo.PhotoDO;
 import com.dilu.service.dictionary.DictionaryService;
 import com.dilu.service.photo.PhotoService;
 import com.github.pagehelper.PageHelper;
@@ -12,7 +11,6 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.annotations.Mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +59,8 @@ public class PhotoController extends BaseController {
         PageHelper.startPage(Integer.valueOf(pageNum), Integer.valueOf(pageSize), " create_time desc ");
         List<Map<String, Object>> list = photoService.queryListByPage(param);
         for (Map<String, Object> map : list) {
-            map.put("typeName", dictionaryService.getDictionaryName((String) map.get("type"), (String) map.get("code")));
+            map.put("typeName", dictionaryService.getDictionaryName("photo-style",
+                    map.get("type") == null ? "" : (map.get("type")).toString()));
         }
         return handlerPagination(new PageInfo(list));
     }

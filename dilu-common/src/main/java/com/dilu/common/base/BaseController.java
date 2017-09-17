@@ -78,6 +78,8 @@ public class BaseController {
      */
     @ExceptionHandler
     public Response handlerException(Exception e) {
+        e.printStackTrace();
+
         Response resp = new Response(9999);
         if (e instanceof ServiceException) {
             resp.setMessage("肯定是你对不起我了");

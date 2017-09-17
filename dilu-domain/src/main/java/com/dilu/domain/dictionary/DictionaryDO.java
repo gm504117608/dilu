@@ -17,8 +17,8 @@ public class DictionaryDO extends BaseDO {
     private String type; // 字典类型
     private Integer enabled; // 字典是否有效【0 无效， 1 有效】
     private String remark; // 备注
-    private Date create_time;
-    private Date modify_time;
+    private Date createTime;
+    private Date modifyTime;
 
     public String getName() {
         return name;
@@ -60,20 +60,20 @@ public class DictionaryDO extends BaseDO {
         this.remark = remark;
     }
 
-    public Date getCreate_time() {
-        return create_time;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setCreate_time(Date create_time) {
-        this.create_time = create_time;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
-    public Date getModify_time() {
-        return modify_time;
+    public Date getModifyTime() {
+        return modifyTime;
     }
 
-    public void setModify_time(Date modify_time) {
-        this.modify_time = modify_time;
+    public void setModifyTime(Date modifyTime) {
+        this.modifyTime = modifyTime;
     }
 
     @Override
@@ -84,8 +84,8 @@ public class DictionaryDO extends BaseDO {
                 ", type='" + type + '\'' +
                 ", enabled=" + enabled +
                 ", remark='" + remark + '\'' +
-                ", create_time=" + create_time +
-                ", modify_time=" + modify_time +
+                ", createTime=" + createTime +
+                ", modifyTime=" + modifyTime +
                 '}';
     }
 }
