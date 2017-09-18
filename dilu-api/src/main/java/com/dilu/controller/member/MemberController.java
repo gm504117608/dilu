@@ -58,7 +58,7 @@ public class MemberController extends BaseController {
         logger.info("待保存用户信息：" + memberDTO.toString());
 
         MemberDO memberDO = new MemberDO();
-        MemberUtil.MemberDTO2MemberDO(memberDTO, memberDO);
+        MemberUtil.memberDTO2MemberDO(memberDTO, memberDO);
         return success(memberService.insert(memberDO));
     }
 
@@ -93,7 +93,7 @@ public class MemberController extends BaseController {
             return error(1000, sb.toString());
         }
         MemberDO memberDO = new MemberDO();
-        MemberUtil.MemberDTO2MemberDO(memberDTO, memberDO);
+        MemberUtil.memberDTO2MemberDO(memberDTO, memberDO);
         return success(memberService.update(memberDO));
     }
 }

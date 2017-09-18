@@ -18,7 +18,7 @@ public class MemberUtil {
      * @param memberDTO 界面传入会员实体信息
      * @param memberDO  数据库表会员实体信息
      */
-    public static void MemberDTO2MemberDO(MemberDTO memberDTO, MemberDO memberDO) {
+    public static void memberDTO2MemberDO(MemberDTO memberDTO, MemberDO memberDO) {
         memberDO.setId(memberDTO.getId());
         memberDO.setNickName(memberDTO.getNickName());
         memberDO.setMobile(memberDTO.getMobile());
