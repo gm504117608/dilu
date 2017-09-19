@@ -21,6 +21,8 @@ public class MD5Util {
     }
 
     public static String encrypt(String algorithm, String str) {
+        Long time = System.nanoTime();
+        str = str + time;
         try {
             MessageDigest md = MessageDigest.getInstance(algorithm);
             md.update(str.getBytes());

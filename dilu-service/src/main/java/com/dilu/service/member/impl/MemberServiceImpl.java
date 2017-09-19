@@ -135,7 +135,7 @@ public class MemberServiceImpl extends AbstractService<MemberDO, Long> implement
         String token = MD5Util.md5(openid);
         redisClient.hset(token, "openid", openid);
         redisClient.hset(token, "session_key", session_key);
-        redisClient.expire(token, 4 * 24 * 60 * 60);
+        redisClient.expire(token, 3 * 24 * 60 * 60);
         return token;
     }
 
