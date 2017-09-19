@@ -41,7 +41,7 @@ public class WeiXinDTO implements Serializable {
     @Override
     public String toString() {
         return "WeiXinDTO{" +
-                ", encryptedData='" + encryptedData + '\'' +
+                "encryptedData='" + encryptedData + '\'' +
                 ", iv='" + iv + '\'' +
                 ", signature='" + signature + '\'' +
                 '}';

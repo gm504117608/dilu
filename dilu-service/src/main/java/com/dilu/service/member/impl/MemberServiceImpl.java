@@ -93,10 +93,9 @@ public class MemberServiceImpl extends AbstractService<MemberDO, Long> implement
         Integer errCode = (Integer) wxInfo.get("errcode");
         if (null == errCode) {
             // 通过sessionKey 和 iv 来解密 encryptedData 数据获取 UnionID (小程序绑定公众号之后的关联值) 。
-            String session_key = (String) wxInfo.get("session_key"); //
+            String session_key = (String) wxInfo.get("session_key");
             String openid = (String) wxInfo.get("openid");
-            Integer expires_in = (Integer) wxInfo.get("expires_in");
-            return createRedisToken(openid, session_key, expires_in);
+            return createRedisToken(openid, session_key);
         }
         logger.info("通过登录凭证获取微信信息 ： " + (String) wxInfo.get("errmsg"));
         return null;
@@ -132,11 +131,11 @@ public class MemberServiceImpl extends AbstractService<MemberDO, Long> implement
      * @param openid      用户唯一标识
      * @param session_key 用户数据进行加密签名的密钥
      */
-    private String createRedisToken(String openid, String session_key, int expires_in) {
+    private String createRedisToken(String openid, String session_key) {
         String token = MD5Util.md5(openid);
         redisClient.hset(token, "openid", openid);
         redisClient.hset(token, "session_key", session_key);
-        redisClient.expire(token, expires_in);
+        redisClient.expire(token, 4 * 24 * 60 * 60);
         return token;
     }
 

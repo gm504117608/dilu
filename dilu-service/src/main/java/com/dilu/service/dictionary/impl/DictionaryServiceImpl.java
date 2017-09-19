@@ -5,10 +5,11 @@ import com.dilu.common.cache.RedisClient;
 import com.dilu.dao.dictionary.DictionaryMapper;
 import com.dilu.domain.dictionary.DictionaryDO;
 import com.dilu.service.dictionary.DictionaryService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Dictionary;
 import java.util.List;
 
 /**
@@ -17,6 +18,8 @@ import java.util.List;
  */
 @Service("dictionaryService")
 public class DictionaryServiceImpl extends AbstractService<DictionaryDO, Long> implements DictionaryService {
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private DictionaryMapper dictionaryMapper;
@@ -48,12 +51,14 @@ public class DictionaryServiceImpl extends AbstractService<DictionaryDO, Long> i
     }
 
     public List<DictionaryDO> getDictionaries(String type) {
+        logger.info("需要获取数据的字典类型：{}", type);
+
         List<DictionaryDO> dictionary = redisClient.lGet("dictionary_" + type, DictionaryDO.class);
         if (null == dictionary) {
             DictionaryDO dictionaryDO = new DictionaryDO();
             dictionaryDO.setType(type);
             List<DictionaryDO> list = dictionaryMapper.queryListAll(dictionaryDO);
-            redisClient.set("dictionary_" + type, 12 * 60 * 60, list);
+            redisClient.set("dictionary_" + type, 24 * 60 * 60, list);
             return list;
         }
         return dictionary;

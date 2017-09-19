@@ -12,6 +12,7 @@ import java.util.Date;
 @Alias("dictionaryDO")
 public class DictionaryDO extends BaseDO {
 
+    private Long parentId; //字典父级id
     private String name; // 字典名称
     private String code; // 字典代码值
     private String type; // 字典类型
@@ -19,6 +20,14 @@ public class DictionaryDO extends BaseDO {
     private String remark; // 备注
     private Date createTime;
     private Date modifyTime;
+
+    public Long getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
+    }
 
     public String getName() {
         return name;
@@ -79,7 +88,8 @@ public class DictionaryDO extends BaseDO {
     @Override
     public String toString() {
         return "DictionaryDO{" +
-                "name='" + name + '\'' +
+                "parentId='" + parentId + '\'' +
+                ", name='" + name + '\'' +
                 ", code='" + code + '\'' +
                 ", type='" + type + '\'' +
                 ", enabled=" + enabled +

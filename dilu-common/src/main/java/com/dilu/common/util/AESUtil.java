@@ -2,6 +2,8 @@ package com.dilu.common.util;
 
 import org.apache.commons.codec.binary.Base64;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -19,10 +21,7 @@ import java.security.spec.InvalidParameterSpecException;
  */
 public class AESUtil {
 
-    static {
-        //BouncyCastle是一个开源的加解密解决方案，主页在http://www.bouncycastle.org/
-        Security.addProvider(new BouncyCastleProvider());
-    }
+    private static Logger logger = LoggerFactory.getLogger(AESUtil.class);
 
     /**
      * AES解密
@@ -34,7 +33,7 @@ public class AESUtil {
      * @throws Exception
      */
     public static String decrypt(String data, String key, String iv) {
-        return decrypt(data, key, iv, "utf-8");
+        return decrypt(data, key, iv, "UTF-8");
     }
 
 
@@ -49,6 +48,8 @@ public class AESUtil {
      * @throws Exception
      */
     public static String decrypt(String data, String key, String iv, String encoding) {
+        logger.info("解密微信返回来的加密数据");
+
         //被加密的数据
         byte[] dataByte = Base64.decodeBase64(data);
         //加密秘钥
@@ -56,6 +57,7 @@ public class AESUtil {
         //偏移量
         byte[] ivByte = Base64.decodeBase64(iv);
         SecretKeySpec spec = new SecretKeySpec(keyByte, "AES");
+        Security.addProvider(new BouncyCastleProvider());
 
         try {
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS7Padding");
@@ -64,10 +66,8 @@ public class AESUtil {
             cipher.init(Cipher.DECRYPT_MODE, spec, parameters);// 初始化
             byte[] resultByte = cipher.doFinal(dataByte);
             if (null != resultByte && resultByte.length > 0) {
-                String result = new String(resultByte, encoding);
-                return result;
+                return new String(resultByte, encoding);
             }
-            return null;
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         } catch (NoSuchPaddingException e) {

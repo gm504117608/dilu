@@ -4,11 +4,12 @@
 <mapper namespace="com.dilu.dao.dictionary.DictionaryMapper">
 
     <sql id="dictionaryColumns">
-        id, name, code, type, enabled, remark, create_time, modify_time
+        id, parent_id, name, code, type, enabled, remark, create_time, modify_time
     </sql>
 
     <resultMap id="dictionaryResultMap" type="dictionaryDO">
         <id column="id" property="id"/>
+        <result column="parent_id" property="parentId"/>
         <result column="name" property="name"/>
         <result column="type" property="type"/>
         <result column="code" property="code"/>
@@ -32,6 +33,9 @@
             </if>
             <if test="code != null and code != ''">
                 and code = trim(#{code})
+            </if>
+            <if test="parentId != null">
+                and parent_id = trim(#{parentId})
             </if>
         </where>
     </select>
