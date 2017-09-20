@@ -53,12 +53,15 @@ public class DictionaryServiceImpl extends AbstractService<DictionaryDO, Long> i
     public List<DictionaryDO> getDictionaries(String type) {
         logger.info("需要获取数据的字典类型：{}", type);
 
-        List<DictionaryDO> dictionary = redisClient.lGet("dictionary_" + type, DictionaryDO.class);
+        List<DictionaryDO> dictionary = redisClient.hgetAll("dictionary:" + type, DictionaryDO.class);
         if (null == dictionary) {
             DictionaryDO dictionaryDO = new DictionaryDO();
             dictionaryDO.setType(type);
             List<DictionaryDO> list = dictionaryMapper.queryListAll(dictionaryDO);
-            redisClient.set("dictionary_" + type, 24 * 60 * 60, list);
+            for (DictionaryDO dd : list) {
+                redisClient.hset("dictionary:" + type, dd.getCode(), dd);
+            }
+            redisClient.expire("dictionary:" + type, 30 * 24 * 60 *60);
             return list;
         }
         return dictionary;

@@ -69,7 +69,6 @@ public class FeedbackController extends BaseController {
     }
 
     @ApiOperation(value = "获取用户反馈类型信息", notes = "获取用户反馈类型在字典表中配置的信息")
-    @ApiImplicitParam(name = "dictionaryDO", value = "字典配置实体信息", dataType = "DictionaryDO")
     @RequestMapping(value = "/dictionary", method = {RequestMethod.GET})
     public Response findFeedbackType() {
         return success(dictionaryService.getDictionaries("feedback"));

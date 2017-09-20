@@ -2,13 +2,12 @@ package com.dilu.common.cache;
 
 import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.JedisPoolConfig;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Redis客户端访问
@@ -266,6 +265,36 @@ public class RedisClient {
         try {
             jedis = jedisPool.getResource();
             return jedis.hmget(key, field);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            jedisPool.returnResource(jedis);
+        }
+    }
+
+
+    /**
+     * 向缓存中设置对象
+     *
+     * @param key
+     * @return
+     */
+    public <T> List<T> hgetAll(String key, Class<T> clazz) {
+        Map<String, String> map = null;
+        Jedis jedis = null;
+        List<T> list = null;
+        try {
+            jedis = jedisPool.getResource();
+            map = jedis.hgetAll(key);
+            if(null == map || map.isEmpty()){
+                return null;
+            }
+            list = new ArrayList<T>();
+            for(Map.Entry<String, String> entry : map.entrySet()) {
+                list.add(JSON.parseObject(entry.getValue(), clazz));
+            }
+            return list;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
