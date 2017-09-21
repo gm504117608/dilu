@@ -17,7 +17,7 @@ public class CouponReceiveDTO implements Serializable {
     private BigDecimal limitingCondition; // 优惠券限制使用条件
     private Date startTime; // 有效开始日期
     private Date endTime; // 有效结束日期
-    private String status; // 优惠券状态【0：可用，1：已使用，2：过期】
+    private Integer status; // 优惠券状态【0：可用，1：已使用，2：过期】
     private Date createTime;
     private Date modifyTime;
 
@@ -82,11 +82,11 @@ public class CouponReceiveDTO implements Serializable {
         this.endTime = endTime;
     }
 
-    public String getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
@@ -148,7 +148,7 @@ public class CouponReceiveDTO implements Serializable {
                 ", limitingCondition=" + limitingCondition +
                 ", startTime=" + startTime +
                 ", endTime=" + endTime +
-                ", status='" + status + '\'' +
+                ", status=" + status +
                 ", createTime=" + createTime +
                 ", modifyTime=" + modifyTime +
                 ", name='" + name + '\'' +

@@ -14,10 +14,14 @@ public class ConsigneeAddressUtil {
      * 将收货地址数据库实体转成界面传输实体
      *
      * @param cado  数据库实体数据
-     * @param cadto 界面展示数据
      */
-    public static void consigneeAddressDO2consigneeAddressDTO(ConsigneeAddressDO cado, ConsigneeAddressDTO cadto,
+    public static ConsigneeAddressDTO consigneeAddressDO2consigneeAddressDTO(ConsigneeAddressDO cado,
                                                               DistrictService districtService) {
+        if (cado == null) {
+            return null;
+        }
+        ConsigneeAddressDTO cadto = new ConsigneeAddressDTO();
+
         cadto.setId(cado.getId());// 唯一标识id
         cadto.setMemberId(cado.getMemberId()); //会员唯一标识id
         cadto.setName(cado.getName()); //收件人
@@ -33,5 +37,7 @@ public class ConsigneeAddressUtil {
         cadto.setIsUsing(cado.getIsUsing()); //是否默认地址【1：是；0：否】
         cadto.setCreateTime(cado.getCreateTime());
         cadto.setModifyTime(cado.getModifyTime());
+
+        return cadto;
     }
 }

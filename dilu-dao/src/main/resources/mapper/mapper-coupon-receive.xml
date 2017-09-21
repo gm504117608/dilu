@@ -27,7 +27,7 @@
 
     <!-- 新增优惠券领取信息 -->
     <insert id="insert" parameterType="couponReceiveDO" useGeneratedKeys="true" keyProperty="id">
-        insert into member (
+        insert into coupon_receive (
             member_id, coupon_id, amount, limiting_condition, start_time, end_time, status,
             create_time, modify_time
         )values (
@@ -61,28 +61,29 @@
     <!-- 获取优惠券数据 -->
     <select id="queryListAll" parameterType="couponReceiveDO" resultMap="couponReceiveResultMap">
         select
-            <include refid="couponReceiveColumns"/>
-            ,b.name, b.coupon_no, b.type
-        from coupon_receive, coupon b
+            a.id, a.member_id, a.coupon_id, a.amount, a.limiting_condition, a.start_time, a.end_time, a.status,
+            a.create_time, a.modify_time, b.name, b.coupon_no, b.type
+        from coupon_receive a, coupon b
         <where>
-            b.id = coupon_receive.coupon_id
+            b.id = a.coupon_id
             <if test="id != null">
-                and coupon_receive.id = trim(#{id})
+                and a.id = trim(#{id})
             </if>
             <if test="memberId != null">
-                and coupon_receive.member_id = trim(#{memberId})
+                and a.member_id = trim(#{memberId})
             </if>
             <if test="couponId != null">
-                and coupon_receive.coupon_id = trim(#{couponId})
+                and a.coupon_id = trim(#{couponId})
             </if>
         </where>
     </select>
 
     <!-- 获取优惠券数据 -->
     <select id="findById" parameterType="java.lang.Long" resultMap="couponReceiveResultMap">
-        select <include refid="couponReceiveColumns"/>, b.name, b.coupon_no, b.type
-        from coupon_receive, coupon b
-        where coupon_receive.id = trim(#{id}) and b.id = coupon_receive.coupon_id
+        select a.id, a.member_id, a.coupon_id, a.amount, a.limiting_condition, a.start_time, a.end_time, a.status,
+            a.create_time, a.modify_time, b.name, b.coupon_no, b.type
+        from coupon_receive a, coupon b
+        where a.id = trim(#{id}) and b.id = a.coupon_id
     </select>
 
 

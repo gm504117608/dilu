@@ -14,7 +14,7 @@ import java.util.Date;
 public class CouponDO extends BaseDO {
 
     private String name; // 系统发布优惠券名称
-    private Long couponNo; // 系统发布优惠券编号
+    private String couponNo; // 系统发布优惠券编号
     private String type; // 系统发布优惠券类型
     private BigDecimal amount; // 优惠券金额
     private BigDecimal limitingCondition; // 优惠券限制使用条件
@@ -22,9 +22,9 @@ public class CouponDO extends BaseDO {
     private Integer enabled; // 是否可用【1（可用）；0（不可用）】
     private String remark; // 备注
     private Date createTime;
-    private Long createUser;
+    private String createUser;
     private Date modifyTime;
-    private Long modifyUser;
+    private String modifyUser;
 
     public String getName() {
         return name;
@@ -34,11 +34,11 @@ public class CouponDO extends BaseDO {
         this.name = name;
     }
 
-    public Long getCouponNo() {
+    public String getCouponNo() {
         return couponNo;
     }
 
-    public void setCouponNo(Long couponNo) {
+    public void setCouponNo(String couponNo) {
         this.couponNo = couponNo;
     }
 
@@ -98,11 +98,11 @@ public class CouponDO extends BaseDO {
         this.createTime = createTime;
     }
 
-    public Long getCreateUser() {
+    public String getCreateUser() {
         return createUser;
     }
 
-    public void setCreateUser(Long createUser) {
+    public void setCreateUser(String createUser) {
         this.createUser = createUser;
     }
 
@@ -114,11 +114,11 @@ public class CouponDO extends BaseDO {
         this.modifyTime = modifyTime;
     }
 
-    public Long getModifyUser() {
+    public String getModifyUser() {
         return modifyUser;
     }
 
-    public void setModifyUser(Long modifyUser) {
+    public void setModifyUser(String modifyUser) {
         this.modifyUser = modifyUser;
     }
 

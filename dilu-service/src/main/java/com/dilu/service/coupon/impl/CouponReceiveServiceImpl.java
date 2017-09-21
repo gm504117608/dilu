@@ -36,7 +36,7 @@ public class CouponReceiveServiceImpl extends AbstractService<CouponReceiveDO, L
 
         Integer validRange = couponDO.getValidRange();
         couponReceiveDO.setStartTime(new Date());
-        couponReceiveDO.setEndTime(null);
+        couponReceiveDO.setEndTime(new Date());
         couponReceiveDO.setAmount(couponDO.getAmount());
         couponReceiveDO.setLimitingCondition(couponDO.getLimitingCondition());
         return super.insert(couponReceiveDO);

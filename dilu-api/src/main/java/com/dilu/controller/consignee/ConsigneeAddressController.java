@@ -160,13 +160,9 @@ public class ConsigneeAddressController extends BaseController {
         consigneeAddressDO.setMemberId(Long.valueOf(memberId));
         List<ConsigneeAddressDO> list = consigneeAddressService.queryListAll(consigneeAddressDO);
 
-        ConsigneeAddressDTO consigneeAddressDTO = null;
         List<ConsigneeAddressDTO> result = new ArrayList<>();
         for (ConsigneeAddressDO cd : list) {
-            consigneeAddressDTO = new ConsigneeAddressDTO();
-            ConsigneeAddressUtil.consigneeAddressDO2consigneeAddressDTO(
-                    cd, consigneeAddressDTO, districtService);
-            result.add(consigneeAddressDTO);
+            result.add(ConsigneeAddressUtil.consigneeAddressDO2consigneeAddressDTO(cd, districtService));
         }
 
         return success(result);
