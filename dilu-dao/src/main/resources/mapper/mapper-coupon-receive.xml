@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dilu.dao.coupon.CouponReceiveMapper">
+
+    <sql id="couponReceiveColumns">
+        id, member_id, coupon_id, amount, limiting_condition, start_time, end_time, status,
+        create_time, modify_time
+    </sql>
+
+    <resultMap id="couponReceiveResultMap" type="couponReceiveDO">
+        <id column="id" property="id"/>
+        <result column="member_id" property="memberId"/>
+        <result column="coupon_id" property="couponId"/>
+        <result column="amount" property="amount"/>
+        <result column="limiting_condition" property="limitingCondition"/>
+        <result column="start_time" property="startTime"/>
+        <result column="end_time" property="endTime"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+        <result column="modify_time" property="modifyTime"/>
+
+        <result column="name" property="name"/>
+        <result column="coupon_no" property="couponNo"/>
+        <result column="type" property="type"/>
+    </resultMap>
+
+    <!-- 新增优惠券领取信息 -->
+    <insert id="insert" parameterType="couponReceiveDO" useGeneratedKeys="true" keyProperty="id">
+        insert into member (
+            member_id, coupon_id, amount, limiting_condition, start_time, end_time, status,
+            create_time, modify_time
+        )values (
+            trim(#{memberId}), trim(#{couponId}), trim(#{amount}), trim(#{limitingCondition}),
+            trim(#{startTime}), trim(#{endTime}), trim(#{status}), sysdate(), sysdate()
+        )
+    </insert>
+
+    <!-- 修改领取优惠券信息 -->
+    <update id="update" parameterType="couponReceiveDO">
+        update coupon_receive
+        <set>
+            <if test="status != null">
+                status = trim(#{status}),
+            </if>
+            modify_time = sysdate()
+        </set>
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="memberId != null">
+                and member_id = trim(#{memberId})
+            </if>
+            <if test="couponId != null">
+                and coupon_id = trim(#{couponId})
+            </if>
+        </where>
+    </update>
+
+    <!-- 获取优惠券数据 -->
+    <select id="queryListAll" parameterType="couponReceiveDO" resultMap="couponReceiveResultMap">
+        select
+            <include refid="couponReceiveColumns"/>
+            ,b.name, b.coupon_no, b.type
+        from coupon_receive, coupon b
+        <where>
+            b.id = coupon_receive.coupon_id
+            <if test="id != null">
+                and coupon_receive.id = trim(#{id})
+            </if>
+            <if test="memberId != null">
+                and coupon_receive.member_id = trim(#{memberId})
+            </if>
+            <if test="couponId != null">
+                and coupon_receive.coupon_id = trim(#{couponId})
+            </if>
+        </where>
+    </select>
+
+    <!-- 获取优惠券数据 -->
+    <select id="findById" parameterType="java.lang.Long" resultMap="couponReceiveResultMap">
+        select <include refid="couponReceiveColumns"/>, b.name, b.coupon_no, b.type
+        from coupon_receive, coupon b
+        where coupon_receive.id = trim(#{id}) and b.id = coupon_receive.coupon_id
+    </select>
+
+
+    <sql id="couponColumns">
+        id, name, coupon_no, type, amount, limiting_condition, valid_range, enabled, remark,
+        create_time, create_user, modify_time, modify_user
+    </sql>
+
+    <resultMap id="couponResultMap" type="couponDO">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="coupon_no" property="couponNo"/>
+        <result column="type" property="type"/>
+        <result column="amount" property="amount"/>
+        <result column="limiting_condition" property="limitingCondition"/>
+        <result column="valid_range" property="validRange"/>
+        <result column="enabled" property="enabled"/>
+        <result column="remark" property="remark"/>
+        <result column="create_time" property="createTime"/>
+        <result column="create_user" property="createUser"/>
+        <result column="modify_time" property="modifyTime"/>
+        <result column="modify_user" property="modifyUser"/>
+    </resultMap>
+
+    <!-- 获取系统发布优惠券数据 -->
+    <select id="findCouponById" parameterType="java.lang.Long" resultMap="couponResultMap">
+        select <include refid="couponColumns"/> from coupon where id = trim(#{id})
+    </select>
+
+</mapper>

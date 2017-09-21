@@ -40,7 +40,7 @@ public class DistrictController extends BaseController {
     @ApiImplicitParam(name = "code", value = "区域代码值", dataType = "String", paramType = "path", required = true)
     @RequestMapping(value = "/city/{code}", method = {RequestMethod.GET})
     public Response findCityData(@PathVariable String code) {
-        if(StringUtils.isEmpty(code)){
+        if (StringUtils.isEmpty(code)) {
             return error(1000, "区域代码值不能为空");
         }
         return success(districtService.findCities(code));
@@ -51,7 +51,7 @@ public class DistrictController extends BaseController {
     @RequestMapping(value = "/area/{code}", method = {RequestMethod.GET})
     public Response findAreaData(@PathVariable String code) {
 
-        if(StringUtils.isEmpty(code)){
+        if (StringUtils.isEmpty(code)) {
             return error(1000, "区域代码值不能为空");
         }
         return success(districtService.findAreas(code));

@@ -162,7 +162,7 @@ public class ConsigneeAddressController extends BaseController {
 
         ConsigneeAddressDTO consigneeAddressDTO = null;
         List<ConsigneeAddressDTO> result = new ArrayList<>();
-        for(ConsigneeAddressDO cd : list){
+        for (ConsigneeAddressDO cd : list) {
             consigneeAddressDTO = new ConsigneeAddressDTO();
             ConsigneeAddressUtil.consigneeAddressDO2consigneeAddressDTO(
                     cd, consigneeAddressDTO, districtService);
@@ -171,6 +171,5 @@ public class ConsigneeAddressController extends BaseController {
 
         return success(result);
     }
-
 
 }
