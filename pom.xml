@@ -49,6 +49,8 @@
         <redis.clients.version>2.9.0</redis.clients.version>
         <!--pageHelper分页插件-->
         <pageHelper.version>4.1.0</pageHelper.version>
+        <!--常用工具 -->
+        <joda-time.version>2.9.9</joda-time.version>
     </properties>
 
     <dependencies>

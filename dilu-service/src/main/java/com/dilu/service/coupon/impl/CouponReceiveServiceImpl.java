@@ -1,6 +1,7 @@
 package com.dilu.service.coupon.impl;
 
 import com.dilu.common.base.impl.AbstractService;
+import com.dilu.common.util.DateUtil;
 import com.dilu.dao.coupon.CouponReceiveMapper;
 import com.dilu.domain.coupon.CouponDO;
 import com.dilu.domain.coupon.CouponReceiveDO;
@@ -36,7 +37,7 @@ public class CouponReceiveServiceImpl extends AbstractService<CouponReceiveDO, L
 
         Integer validRange = couponDO.getValidRange();
         couponReceiveDO.setStartTime(new Date());
-        couponReceiveDO.setEndTime(new Date());
+        couponReceiveDO.setEndTime(DateUtil.plusDays(new Date(), validRange));
         couponReceiveDO.setAmount(couponDO.getAmount());
         couponReceiveDO.setLimitingCondition(couponDO.getLimitingCondition());
         return super.insert(couponReceiveDO);

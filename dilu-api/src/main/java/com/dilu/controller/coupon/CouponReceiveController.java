@@ -43,8 +43,8 @@ public class CouponReceiveController extends BaseController {
 
         // 基本规则校验
         StringBuilder sb = new StringBuilder();
-        String status = couponReceiveDO.getStatus();
-        if (StringUtils.isEmpty(status)) {
+        Integer status = couponReceiveDO.getStatus();
+        if (null == status) {
             sb.append("【优惠券状态】不能为空;");
         }
         Long id = couponReceiveDO.getId();
