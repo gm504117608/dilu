@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,7 +24,7 @@ import java.util.List;
  * @create 2017-09-21 15:57
  */
 @RestController
-@RequestMapping("/coupon")
+@RequestMapping("/coupons")
 @Api(value = "CouponReceiveController", description = "优惠券信息处理")
 public class CouponReceiveController extends BaseController {
 
@@ -98,6 +99,7 @@ public class CouponReceiveController extends BaseController {
 
         CouponReceiveDO couponReceiveDO = new CouponReceiveDO();
         couponReceiveDO.setMemberId(Long.valueOf(memberId));
+        couponReceiveDO.setEndTime(new Date());// 查询有效结束时间为当前时间之后的优惠券
         List<CouponReceiveDO> list = couponReceiveService.queryListAll(couponReceiveDO);
 
         CouponReceiveDTO couponReceiveDTO = null;

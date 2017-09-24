@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dilu.dao.photo.PhotoDetailMapper">
+
+    <sql id="photoDetailColumns">
+        id, photo_id, picture, type, remark, create_time
+    </sql>
+
+    <resultMap id="photoDetailResultMap" type="photoDetailDO">
+        <id column="id" property="id"/>
+        <result column="photo_id" property="photoId"/>
+        <result column="picture" property="picture"/>
+        <result column="type" property="type"/>
+        <result column="remark" property="remark"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <!-- 获取相册数据 -->
+    <select id="findByPhotoId" parameterType="java.lang.Long" resultMap="photoDetailResultMap">
+        select <include refid="photoDetailColumns"/> from photo_detail where photo_id = trim(#{id})
+    </select>
+
+
+</mapper>

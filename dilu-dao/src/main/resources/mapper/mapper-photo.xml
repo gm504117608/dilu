@@ -36,6 +36,7 @@
                 or (size like CONCAT('%', trim(#{searchValue}), '%')))
             </if>
         </where>
+        order by create_time DESC
     </select>
 
     <!-- 获取相册数据 -->

@@ -75,7 +75,14 @@
             <if test="couponId != null">
                 and a.coupon_id = trim(#{couponId})
             </if>
+            <if test="status != null">
+                and a.status = trim(#{status})
+            </if>
+            <if test="endTime != null">
+                and a.end_time >= trim(#{endTime})
+            </if>
         </where>
+        order by a.create_time DESC
     </select>
 
     <!-- 获取优惠券数据 -->
