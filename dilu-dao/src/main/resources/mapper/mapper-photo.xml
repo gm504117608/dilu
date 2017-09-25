@@ -25,7 +25,8 @@
     <!-- 获取相册数据 -->
     <select id="queryListByPage" parameterType="java.util.Map" resultType="java.util.Map">
         select
-        <include refid="photoColumns"/>
+            id, name, type, size, price, production_price as productionPrice, agency_price as agencyPrice,
+            picture_url as pictureUrl, production_url as productionUrl, remark, create_time as createTime
         from photo
         <where>
             <if test="id != null">

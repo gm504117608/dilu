@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dilu.dao.reservation.ShoppingCarMapper">
+
+    <sql id="shoppingCarColumns">
+        id, member_id, photo_id, quantity, type, create_time, modify_time
+    </sql>
+
+    <resultMap id="shoppingCarResultMap" type="shoppingCarDO">
+        <id column="id" property="id"/>
+        <result column="member_id" property="memberId"/>
+        <result column="photo_id" property="photoId"/>
+        <result column="quantity" property="quantity"/>
+        <result column="type" property="type"/>
+        <result column="create_time" property="createTime"/>
+        <result column="modify_time" property="modifyTime"/>
+    </resultMap>
+
+    <!-- 新增购物车信息 -->
+    <insert id="insert" parameterType="shoppingCarDO" useGeneratedKeys="true" keyProperty="id">
+        insert into shopping_car (
+            member_id, photo_id, quantity, type, create_time, modify_time
+        )values (
+            trim(#{memberId}), trim(#{photoId}), trim(#{quantity}),
+            trim(#{type}), sysdate(), sysdate()
+        )
+    </insert>
+
+    <!-- 修改购物车信息 -->
+    <update id="update" parameterType="shoppingCarDO">
+        update shopping_car
+        <set>
+            <if test="quantity != null">
+                quantity = trim(#{quantity}),
+            </if>
+            <if test="type != null">
+                type = trim(#{type}),
+            </if>
+            modify_time = sysdate()
+        </set>
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="photoId != null">
+                and photo_id = trim(#{photoId})
+            </if>
+            <if test="memberId != null">
+                and member_id = trim(#{memberId})
+            </if>
+        </where>
+    </update>
+
+    <!-- 获取会员下的购物车数据 -->
+    <select id="queryListAll" parameterType="shoppingCarDO" resultMap="shoppingCarResultMap">
+        select
+            <include refid="shoppingCarColumns"/>
+        from shopping_car
+        <where>
+            <if test="memberId != null">
+                and member_id = trim(#{memberId})
+            </if>
+            <if test="type != null">
+                and type = trim(#{type})
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <!-- 删除购物车数据 -->
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete from shopping_car where id = trim(#{id})
+    </delete>
+
+</mapper>
