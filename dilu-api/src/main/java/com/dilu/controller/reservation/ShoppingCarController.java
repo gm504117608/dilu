@@ -59,6 +59,7 @@ public class ShoppingCarController extends BaseController {
         }
         ShoppingCarDO shoppingCarDO = new ShoppingCarDO();
         shoppingCarDO.setMemberId(Long.valueOf(memberId));
+        shoppingCarDO.setType(0);
         List<ShoppingCarDO> list = shoppingCarService.queryListAll(shoppingCarDO);
         List<ShoppingCarDTO> result = new ArrayList<>();
         ShoppingCarDTO shoppingCarDTO = null;

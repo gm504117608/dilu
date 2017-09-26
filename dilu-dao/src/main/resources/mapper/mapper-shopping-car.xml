@@ -21,7 +21,7 @@
     <insert id="insert" parameterType="shoppingCarDO" useGeneratedKeys="true" keyProperty="id">
         insert into shopping_car (
             member_id, photo_id, quantity, type, create_time, modify_time
-        )values (
+        ) values (
             trim(#{memberId}), trim(#{photoId}), trim(#{quantity}),
             trim(#{type}), sysdate(), sysdate()
         )

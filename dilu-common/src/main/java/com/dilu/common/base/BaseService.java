@@ -131,10 +131,19 @@ public interface BaseService<T, ID extends Serializable> {
      * @param parameter 查询参数map
      * @return List<Map<String, Object>> 返回查询的对象集合
      * @throws
-     * @Title: queryListAll
+     * @Title: queryListByPage
      * @Description: 根据分页参数查询对象
      */
     public List<Map<String, Object>> queryListByPage(Map<String, Object> parameter);
+
+    /**
+     * @param parameter 查询参数map
+     * @return List<T> 返回查询的对象集合
+     * @throws
+     * @Title: queryListByPageEntity
+     * @Description: 根据分页参数查询对象
+     */
+    public List<T> queryListByPageEntity(Map<String, Object> parameter);
 
     /**
      * @param parameter 查询参数map

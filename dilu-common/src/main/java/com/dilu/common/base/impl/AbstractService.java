@@ -139,6 +139,11 @@ public class AbstractService<T, ID extends Serializable> implements BaseService<
     }
 
     @Override
+    public List<T> queryListByPageEntity(Map<String, Object> parameter) {
+        return baseMapper.queryListByPageEntity(parameter);
+    }
+
+    @Override
     public int count(Map<String, Object> parameter) {
         return baseMapper.count(parameter);
     }

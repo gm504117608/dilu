@@ -38,6 +38,8 @@ public interface BaseMapper<T, ID extends Serializable> {
 
     public List<Map<String, Object>> queryListByPage(Map<String, Object> parameter);
 
+    public List<T> queryListByPageEntity(Map<String, Object> parameter);
+
     public int count(Map<String, Object> parameter);
 
     public int count(T t);
