@@ -86,8 +86,8 @@ public class CouponReceiveController extends BaseController {
     public Response findById(@PathVariable String id) {
         logger.info("获取用户优惠券信息：" + id);
 
-        CouponReceiveDTO couponReceiveDTO = new CouponReceiveDTO();
-        couponReceiveDO2CouponReceiveDTO(couponReceiveService.findById(Long.valueOf(id)), couponReceiveDTO);
+        CouponReceiveDTO couponReceiveDTO = CouponUtil.couponReceiveDO2CouponReceiveDTO(
+                couponReceiveService.findById(Long.valueOf(id)),  dictionaryService);
         return success(couponReceiveDTO);
     }
 
@@ -105,35 +105,12 @@ public class CouponReceiveController extends BaseController {
         CouponReceiveDTO couponReceiveDTO = null;
         List<CouponReceiveDTO> result = new ArrayList<>();
         for (CouponReceiveDO cd : list) {
-            couponReceiveDTO = new CouponReceiveDTO();
-            couponReceiveDO2CouponReceiveDTO(cd, couponReceiveDTO);
+            couponReceiveDTO = CouponUtil.couponReceiveDO2CouponReceiveDTO(cd, dictionaryService);
             result.add(couponReceiveDTO);
         }
         return success(result);
     }
 
-    /**
-     * 实体值之间的转换
-     *
-     * @param couponReceiveDO
-     * @param couponReceiveDTO
-     */
-    private void couponReceiveDO2CouponReceiveDTO(CouponReceiveDO couponReceiveDO, CouponReceiveDTO couponReceiveDTO) {
-        couponReceiveDTO.setId(couponReceiveDO.getId());
-        couponReceiveDTO.setMemberId(couponReceiveDO.getMemberId());
-        couponReceiveDTO.setCouponId(couponReceiveDO.getCouponId());
-        couponReceiveDTO.setAmount(couponReceiveDO.getAmount());
-        couponReceiveDTO.setLimitingCondition(couponReceiveDO.getLimitingCondition());
-        couponReceiveDTO.setStartTime(couponReceiveDO.getStartTime());
-        couponReceiveDTO.setEndTime(couponReceiveDO.getEndTime());
-        couponReceiveDTO.setStatus(couponReceiveDO.getStatus());
-        couponReceiveDTO.setCreateTime(couponReceiveDO.getCreateTime());
-        couponReceiveDTO.setModifyTime(couponReceiveDO.getModifyTime());
-        couponReceiveDTO.setName(couponReceiveDO.getName());
-        couponReceiveDTO.setCouponNo(couponReceiveDO.getCouponNo());
-        couponReceiveDTO.setType(couponReceiveDO.getType());
-        couponReceiveDTO.setTypeName(dictionaryService.getDictionaryName("coupon-type",
-                couponReceiveDO.getType()));
-    }
+
 
 }

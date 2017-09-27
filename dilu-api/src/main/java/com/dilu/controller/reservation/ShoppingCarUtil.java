@@ -20,7 +20,7 @@ public class ShoppingCarUtil {
         shoppingCarDTO.setType(shoppingCarDO.getType());
         shoppingCarDTO.setQuantity(shoppingCarDO.getQuantity());
         shoppingCarDTO.setCreateTime(shoppingCarDO.getCreateTime());
-        shoppingCarDTO.setModifyTime(shoppingCarDO.getCreateTime());
+        shoppingCarDTO.setModifyTime(shoppingCarDO.getModifyTime());
 
         return shoppingCarDTO;
     }

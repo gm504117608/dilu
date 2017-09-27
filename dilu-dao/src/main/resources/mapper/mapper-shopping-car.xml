@@ -68,6 +68,11 @@
         order by create_time desc
     </select>
 
+    <!-- 获取购物车数据 -->
+    <select id="findById" parameterType="java.lang.Long" resultMap="shoppingCarResultMap">
+        select <include refid="shoppingCarColumns"/> from shopping_car where id = trim(#{id})
+    </select>
+
     <!-- 删除购物车数据 -->
     <delete id="deleteById" parameterType="java.lang.Long">
         delete from shopping_car where id = trim(#{id})

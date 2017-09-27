@@ -4,8 +4,8 @@
 <mapper namespace="com.dilu.dao.reservation.ReservationMapper">
 
     <sql id="reservationColumns">
-        id, member_id, shopping_car_ids, consignee_id, coupon_receive_id, order_no, cost, status,
-        remark, create_time, modify_time
+        id, member_id, shopping_car_ids, consignee_id, coupon_receive_id, order_no,
+        cost, express_cost, coupon_cost, really_cost, status, remark, create_time, modify_time
     </sql>
 
     <resultMap id="reservationResultMap" type="reservationDO">
@@ -16,6 +16,9 @@
         <result column="coupon_receive_id" property="couponReceiveId"/>
         <result column="order_no" property="orderNo"/>
         <result column="cost" property="cost"/>
+        <result column="express_cost" property="expressCost"/>
+        <result column="coupon_cost" property="couponCost"/>
+        <result column="really_cost" property="reallyCost"/>
         <result column="status" property="status"/>
         <result column="remark" property="remark"/>
         <result column="create_time" property="createTime"/>
@@ -25,11 +28,13 @@
     <!-- 新增订单信息 -->
     <insert id="insert" parameterType="reservationDO" useGeneratedKeys="true" keyProperty="id">
         insert into reservation (
-            member_id, shopping_car_ids, consignee_id, coupon_receive_id, order_no, cost, status,
+            member_id, shopping_car_ids, consignee_id, coupon_receive_id, order_no,
+            cost, express_cost, coupon_cost, really_cost, status,
             remark, create_time, modify_time
         )values (
             trim(#{memberId}), trim(#{shoppingCarIds}), trim(#{consigneeId}), trim(#{couponReceiveId}), trim(#{orderNo}),
-            trim(#{cost}), trim(#{status}), trim(#{remark}), sysdate(), sysdate()
+            trim(#{cost}), trim(#{expressCost}), trim(#{couponCost}), trim(#{reallyCost}),
+            trim(#{status}), trim(#{remark}), sysdate(), sysdate()
         )
     </insert>
 

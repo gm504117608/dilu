@@ -18,4 +18,6 @@ public interface ShoppingCarService {
 
     public List<ShoppingCarDO> queryListAll(ShoppingCarDO shoppingCarDO);
 
+    public ShoppingCarDO findById(Long id);
+
 }

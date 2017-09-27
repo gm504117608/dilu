@@ -1,18 +1,21 @@
-package com.dilu.domain.reservation;
+package com.dilu.domain.Reservation;
 
-import com.dilu.common.base.BaseDO;
-import org.apache.ibatis.type.Alias;
+import com.dilu.domain.consignee.ConsigneeAddressDTO;
+import com.dilu.domain.coupon.CouponReceiveDTO;
+import com.dilu.domain.photo.PhotoDTO;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author guonima
- * @create 2017-09-26 14:33
+ * @create 2017-09-27 11:11
  */
-@Alias("reservationDO")
-public class ReservationDO extends BaseDO {
+public class ReservationDTO implements Serializable {
 
+    private Long id;
     private Long memberId;//会员id
     private String shoppingCarIds; //购物车唯一标识id串
     private Long consigneeId;//收货地址唯一标识id
@@ -23,9 +26,26 @@ public class ReservationDO extends BaseDO {
     private BigDecimal couponCost;//优惠券金额
     private BigDecimal reallyCost;//真实需要支付金额
     private String status;//订单状态
+    private String statusName;//订单状态名称
     private String remark;//备注
     private Date createTime;
     private Date modifyTime;
+
+    // 相册
+    List<PhotoDTO> photos;
+    // 优惠券
+    private CouponReceiveDTO coupon;
+    // 收货地址
+    private ConsigneeAddressDTO consignee;
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public Long getMemberId() {
         return memberId;
@@ -107,6 +127,14 @@ public class ReservationDO extends BaseDO {
         this.status = status;
     }
 
+    public String getStatusName() {
+        return statusName;
+    }
+
+    public void setStatusName(String statusName) {
+        this.statusName = statusName;
+    }
+
     public String getRemark() {
         return remark;
     }
@@ -131,10 +159,35 @@ public class ReservationDO extends BaseDO {
         this.modifyTime = modifyTime;
     }
 
+    public List<PhotoDTO> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(List<PhotoDTO> photos) {
+        this.photos = photos;
+    }
+
+    public CouponReceiveDTO getCoupon() {
+        return coupon;
+    }
+
+    public void setCoupon(CouponReceiveDTO coupon) {
+        this.coupon = coupon;
+    }
+
+    public ConsigneeAddressDTO getConsignee() {
+        return consignee;
+    }
+
+    public void setConsignee(ConsigneeAddressDTO consignee) {
+        this.consignee = consignee;
+    }
+
     @Override
     public String toString() {
-        return "ReservationDO{" +
-                "memberId=" + memberId +
+        return "ReservationDTO{" +
+                "id=" + id +
+                ", memberId=" + memberId +
                 ", shoppingCarIds='" + shoppingCarIds + '\'' +
                 ", consigneeId=" + consigneeId +
                 ", couponReceiveId=" + couponReceiveId +
@@ -144,9 +197,13 @@ public class ReservationDO extends BaseDO {
                 ", couponCost=" + couponCost +
                 ", reallyCost=" + reallyCost +
                 ", status='" + status + '\'' +
+                ", statusName='" + statusName + '\'' +
                 ", remark='" + remark + '\'' +
                 ", createTime=" + createTime +
                 ", modifyTime=" + modifyTime +
+                ", photos=" + photos +
+                ", coupon=" + coupon +
+                ", consignee=" + consignee +
                 '}';
     }
 }

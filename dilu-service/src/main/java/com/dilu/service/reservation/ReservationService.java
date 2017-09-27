@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public interface ReservationService {
 
-    public int insert(ReservationDO reservationDO);
+    public String insertReservation(ReservationDO reservationDO);
 
     public int update(ReservationDO reservationDO);
 
